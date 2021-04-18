@@ -15,7 +15,7 @@ class BikeController extends Controller
     public function index()
     {
         //
-        echo "fdddedsf";
+        echo "fdsf";
     }
 
     /**
