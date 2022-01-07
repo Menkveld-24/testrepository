@@ -1,16 +1,17 @@
 name: Superlinter
 
 on:
-  push:
-    branches: [ ** ]
-  pull_request:
-    branches: [ ** ]
+  - push
+  - pull_request
 
 jobs:
-  laravel-tests:
-
+  Superlinter:
+    name: Superlint for github
     runs-on: ubuntu-latest
 
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Super-Linter
-    uses: github/super-linter@v4.8.5
+      uses: github/super-linter@v4.8.5
