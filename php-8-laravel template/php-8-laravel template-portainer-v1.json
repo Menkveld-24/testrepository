@@ -1,0 +1,23 @@
+[
+  {
+    "title": "Php-8 laravel",
+    "name": "php-8-laravel",
+    "image": "php:8",
+    "description": "php8",
+    "categories": [
+      "Laravel"
+    ],
+    "platform": "linux",
+    "restart_policy": "always",
+    "env": [
+      {
+        "name": "naam",
+        "default": "projectnaam",
+        "description": "projectnaam",
+        "label": "label"
+      }
+    ],
+    "network_mode": "host",
+    "type": 1
+  }
+]
