@@ -46,22 +46,7 @@ pipeline {
         echo 'Created new volumes!'
       }
     }
-
-    stage('Cloning live volumes into staging') {
-      steps {
-        sh 'docker run --rm -i -t -v ${GROUP}.production.${PROJECT}.storage:/from -v ${GROUP}.staging.${PROJECT}.storage:/to alpine ash -c "cd /from; cp -av . /to"'
-        sh 'docker run --rm -i -t -v ${GROUP}.production.${PROJECT}.database:/from -v ${GROUP}.staging.${PROJECT}.database:/to alpine ash -c "cd /from; cp -av . /to"'
-        echo 'Duplicated volumes'
-      }
-    }
-
-    stage('Building and deploying') {
-      steps {
-        sh 'docker-compose --file ./docker/staging/docker-compose.yml up -d --build'
-        echo 'Completed successfully!'
-      }
-    }
-
+    
     stage('Freezing production containers') {
       steps {
         sh 'docker pause ${GROUP}.production.${PROJECT}'
@@ -70,11 +55,28 @@ pipeline {
       }
     }
 
+    stage('Cloning live volumes into staging') {
+      steps {
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+            sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.storage ${GROUP}.staging.${PROJECT}.storage'
+            sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.database ${GROUP}.staging.${PROJECT}.database'
+            echo 'Duplicated volumes'
+        }
+      }
+    }
+    
     stage('Resume containers') {
       steps {
         sh 'docker unpause ${GROUP}.production.${PROJECT}.mysql'
         sh 'docker unpause ${GROUP}.production.${PROJECT}'
         echo 'Resumed containers'
+      }
+    }
+
+    stage('Building and deploying') {
+      steps {
+        sh 'docker-compose --file ./docker/staging/docker-compose.yml up -d --build'
+        echo 'Completed successfully!'
       }
     }
 
