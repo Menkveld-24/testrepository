@@ -1,0 +1,34 @@
+version: "3.3"
+
+services:
+  php:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    image: php:8-apache
+    working_dir: /var/www/html
+    container_name: php_apache
+    restart: always
+    ports:
+      - "8081:80"
+      - "8082:81"
+      - "8083:443"
+    volumes:
+      # - ./sites:/var/www/html/
+      - ./config/000-default.conf:/etc/apache2/sites-available/000-default.conf
+
+  db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    container_name: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: RzXOs4esLxVM
+    volumes:
+      - mysql-php-apache:/var/lib/mysql
+    ports:
+      - "3306:3306"
+      - "33060:33060"
+
+volumes:
+  mysql-php-apache:
