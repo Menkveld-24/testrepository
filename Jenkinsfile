@@ -4,7 +4,7 @@ pipeline {
     stage('Stopping current container') {
       agent any
       steps {
-        sh '''docker stop ${GROUP}.staging.${PROJECTNAAM}
+        sh '''docker stop ${GROUP}.staging.${PROJECT}
 '''
         echo 'Stopped current staging container'
       }
