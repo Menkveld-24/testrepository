@@ -22,7 +22,7 @@ pipeline {
 
       }
     }
-    
+
     stage('Deleting current staging containers') {
       steps {
         sh 'docker rm ${GROUP}.staging.${PROJECT}'
@@ -59,6 +59,22 @@ pipeline {
       steps {
         sh 'docker-compose --file ./docker/staging/docker-compose.yml up -d --build'
         echo 'Completed successfully!'
+      }
+    }
+
+    stage('Freezing production containers') {
+      steps {
+        sh 'docker pause ${GROUP}.production.${PROJECT}'
+        sh 'docker pause ${GROUP}.production.${PROJECT}.mysql'
+        echo 'Froze containers'
+      }
+    }
+
+    stage('Resume containers') {
+      steps {
+        sh 'docker unpause ${GROUP}.production.${PROJECT}.mysql'
+        sh 'docker unpause ${GROUP}.production.${PROJECT}'
+        echo 'Resumed containers'
       }
     }
 
