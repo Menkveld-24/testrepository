@@ -22,6 +22,14 @@ pipeline {
 
       }
     }
+    
+    stage('Deleting current staging containers') {
+      steps {
+        sh 'docker rm ${GROUP}.staging.${PROJECT}'
+        sh 'docker rm ${GROUP}.staging.${PROJECT}.mysql'
+        echo 'Deleted old containers'
+      }
+    }
 
     stage('Removing staging storage and database') {
       steps {
@@ -44,14 +52,6 @@ pipeline {
         sh 'docker run --rm -i -t -v ${GROUP}.production.${PROJECT}.storage:/from -v ${GROUP}.staging.${PROJECT}.storage:/to alpine ash -c "cd /from; cp -av . /to"'
         sh 'docker run --rm -i -t -v ${GROUP}.production.${PROJECT}.database:/from -v ${GROUP}.staging.${PROJECT}.database:/to alpine ash -c "cd /from; cp -av . /to"'
         echo 'Duplicated volumes'
-      }
-    }
-
-    stage('Delete') {
-      steps {
-        sh 'docker rm ${GROUP}.staging.${PROJECT}'
-        sh 'docker rm ${GROUP}.staging.${PROJECT}.mysql'
-        echo 'Deleted old containers'
       }
     }
 
