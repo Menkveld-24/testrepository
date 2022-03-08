@@ -58,17 +58,17 @@ pipeline {
         echo 'Created new volumes!'
       }
     }
+      
+    stage('Copying .env') {
+      steps {
+        sh 'cp .env.example .env'
+      }
+    }
 
     stage('Building and deploying') {
       steps {
         sh 'docker-compose --file ./docker/staging/docker-compose.yml up -d --build'
         echo 'Completed successfully!'
-      }
-    }
-
-    stage('Copying .env') {
-      steps {
-        sh 'cp .env.example .env'
       }
     }
 
