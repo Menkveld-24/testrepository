@@ -26,6 +26,12 @@ pipeline {
         echo 'Completed successfully!'
       }
     }
+   
+   stage('Creating env symlink') {
+      steps {
+          sh 'docker exec ${GROUP}.production.${PROJECT} ln -s /envfile/.env /var/www/html/.env'
+      }
+    }
     
    stage('Running composer update') {
       steps {
