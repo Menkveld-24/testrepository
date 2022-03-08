@@ -1,13 +1,13 @@
-FROM mysql:8.0 as database
+# FROM mysql:8.0 as database
 
-# Default password for .env
+# # Default password for .env
 
-ENV MYSQL_ROOT_PASSWORD=staging
-ENV MYSQL_DATABASE=staging
-ENV MYSQL_USER=staging
-ENV MYSQL_PASSWORD=staging
-EXPOSE 3306
-# RUN ls
+# ENV MYSQL_ROOT_PASSWORD=staging
+# ENV MYSQL_DATABASE=staging
+# ENV MYSQL_USER=staging
+# ENV MYSQL_PASSWORD=staging
+# EXPOSE 3306
+# # RUN ls
 
 
 FROM php:8-apache as webserver
@@ -31,7 +31,6 @@ RUN apt-get update && apt-get install zip libzip-dev -y
 RUN docker-php-ext-configure zip
 
 WORKDIR /var/www/html
-# RUN cp .env.example .env
 RUN ls
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
@@ -59,7 +58,5 @@ RUN chown -R www-data:www-data /var/www/html/bootstrap/cache
 #    && docker-php-ext-configure gd --with-freetype --with-jpeg \
 #    && docker-php-ext-install -j$(nproc) gd
 # RUN docker-php-ext-install exif
-# RUN a2enmod rewrite
-# RUN service apache2 restart
-EXPOSE 80
-RUN echo hello world
+RUN a2enmod rewrite
+RUN service apache2 restart
