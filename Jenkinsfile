@@ -6,20 +6,22 @@ pipeline {
         stage('Stopping current container') {
           agent any
           steps {
-              catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
-                sh '''docker stop ${GROUP}.staging.${PROJECT}'''
-                echo 'Stopped current staging container'
-              }
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+              sh 'docker stop ${GROUP}.staging.${PROJECT}'
+              echo 'Stopped current staging container'
+            }
+
           }
         }
 
         stage('Stopping current containers database') {
           steps {
-              catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
-            sh '''docker stop ${GROUP}.staging.${PROJECT}.mysql
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+              sh '''docker stop ${GROUP}.staging.${PROJECT}.mysql
 '''
-            echo 'Stopped mysql container'
-              }
+              echo 'Stopped mysql container'
+            }
+
           }
         }
 
@@ -28,21 +30,23 @@ pipeline {
 
     stage('Deleting current staging containers') {
       steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {  
-            sh 'docker rm ${GROUP}.staging.${PROJECT}'
-            sh 'docker rm ${GROUP}.staging.${PROJECT}.mysql'
-            echo 'Deleted old containers'
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+          sh 'docker rm ${GROUP}.staging.${PROJECT}'
+          sh 'docker rm ${GROUP}.staging.${PROJECT}.mysql'
+          echo 'Deleted old containers'
         }
+
       }
     }
 
     stage('Removing staging storage and database') {
       steps {
-          catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
-            sh 'docker volume rm ${GROUP}.staging.${PROJECT}.storage'
-            sh 'docker volume rm ${GROUP}.staging.${PROJECT}.database'
-            echo 'Deleted old database and storage'
-          }
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+          sh 'docker volume rm ${GROUP}.staging.${PROJECT}.storage'
+          sh 'docker volume rm ${GROUP}.staging.${PROJECT}.database'
+          echo 'Deleted old database and storage'
+        }
+
       }
     }
 
@@ -53,7 +57,7 @@ pipeline {
         echo 'Created new volumes!'
       }
     }
-    
+
     stage('Freezing production containers') {
       steps {
         sh 'docker pause ${GROUP}.production.${PROJECT}'
@@ -65,13 +69,14 @@ pipeline {
     stage('Cloning live volumes into staging') {
       steps {
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
-            sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.storage ${GROUP}.staging.${PROJECT}.storage'
-            sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.database ${GROUP}.staging.${PROJECT}.database'
-            echo 'Duplicated volumes'
+          sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.storage ${GROUP}.staging.${PROJECT}.storage'
+          sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.database ${GROUP}.staging.${PROJECT}.database'
+          echo 'Duplicated volumes'
         }
+
       }
     }
-    
+
     stage('Resume containers') {
       steps {
         sh 'docker unpause ${GROUP}.production.${PROJECT}.mysql'
