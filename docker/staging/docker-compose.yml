@@ -7,7 +7,7 @@ services:
       dockerfile: docker/staging/Dockerfile
     image: php:8-apache
     working_dir: /var/www/html
-    container_name: menke.staging.testproject.mysql
+    container_name: menke.staging.testproject
     restart: always
     ports:
       - "8081:80"
