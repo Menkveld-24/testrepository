@@ -30,6 +30,29 @@ pipeline {
     }
 
     stage('Deleting current staging containers') {
+      parallel {
+        stage('Removing current container') {
+          agent any
+          steps {
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+              sh 'docker rm ${GROUP}.staging.${PROJECT}'
+              echo 'Removed current staging container'
+            }
+
+          }
+        }
+
+        stage('Removing current containers database') {
+          steps {
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+              sh 'docker rm ${GROUP}.staging.${PROJECT}.mysql'
+              echo 'Removed mysql container'
+            }
+
+          }
+        }
+
+      }
       steps {
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
           sh 'docker rm ${GROUP}.staging.${PROJECT}'
