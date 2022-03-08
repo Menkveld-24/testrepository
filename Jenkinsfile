@@ -6,17 +6,20 @@ pipeline {
         stage('Stopping current container') {
           agent any
           steps {
-            sh '''docker stop ${GROUP}.staging.${PROJECT}
-'''
-            echo 'Stopped current staging container'
+              catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+                sh '''docker stop ${GROUP}.staging.${PROJECT}'''
+                echo 'Stopped current staging container'
+              }
           }
         }
 
         stage('Stopping current containers database') {
           steps {
+              catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
             sh '''docker stop ${GROUP}.staging.${PROJECT}.mysql
 '''
             echo 'Stopped mysql container'
+              }
           }
         }
 
@@ -25,17 +28,21 @@ pipeline {
 
     stage('Deleting current staging containers') {
       steps {
-        sh 'docker rm ${GROUP}.staging.${PROJECT}'
-        sh 'docker rm ${GROUP}.staging.${PROJECT}.mysql'
-        echo 'Deleted old containers'
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {  
+            sh 'docker rm ${GROUP}.staging.${PROJECT}'
+            sh 'docker rm ${GROUP}.staging.${PROJECT}.mysql'
+            echo 'Deleted old containers'
+        }
       }
     }
 
     stage('Removing staging storage and database') {
       steps {
-        sh 'docker volume rm ${GROUP}.staging.${PROJECT}.storage'
-        sh 'docker volume rm ${GROUP}.staging.${PROJECT}.database'
-        echo 'Deleted old database and storage'
+          catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+            sh 'docker volume rm ${GROUP}.staging.${PROJECT}.storage'
+            sh 'docker volume rm ${GROUP}.staging.${PROJECT}.database'
+            echo 'Deleted old database and storage'
+          }
       }
     }
 
