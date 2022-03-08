@@ -11,7 +11,7 @@ services:
     restart: always
     volumes:
       - storage:/var/www/html/storage
-      - env:/var/www/html/
+      - env:/envfile
       
 volumes:
   env:
