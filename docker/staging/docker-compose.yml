@@ -3,7 +3,7 @@ version: "3.3"
 services:
   php:
     build:
-      context: ../../
+      context: ./
       dockerfile: Dockerfile
     image: php:8-apache
     working_dir: /var/www/html
