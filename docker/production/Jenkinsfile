@@ -28,7 +28,7 @@ pipeline {
     
     stage('Building') {
       steps {
-        sh 'docker-compose --force-recreate --file ./docker/production/docker-compose.yml up -d --build'
+        sh 'docker-compose --file ./docker/production/docker-compose.yml up -d --force-recreate --build'
         echo 'Completed successfully!'
       }
     }
