@@ -9,10 +9,6 @@ services:
     working_dir: /var/www/html
     container_name: menke.production.testproject
     restart: always
-    ports:
-      - "8081:80"
-      - "8082:81"
-      - "8083:443"
     volumes:
       - storage:/var/www/html/storage
       - env:/var/www/html/
