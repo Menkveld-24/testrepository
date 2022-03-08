@@ -45,6 +45,13 @@ pipeline {
         }
       }
       }
+      
+    stage('Pruning all images') {
+      steps {
+          sh 'docker image prune -af'
+      }
+    }
+      
     stage('Copying .env') {
       steps {
         sh 'cp .env.example .env'
