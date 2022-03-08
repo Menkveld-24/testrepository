@@ -6,7 +6,7 @@ pipeline {
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
               sh '''docker stop ${GROUP}.production.${PROJECT}
 '''
-              echo 'Stopped current staging container'
+              echo 'Stopped current production container'
             }
           }
         }
@@ -14,8 +14,8 @@ pipeline {
         stage('Removing current container') {
           steps {
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-              sh 'docker rm ${GROUP}.staging.${PROJECT}'
-              echo 'Removed current staging container'
+              sh 'docker rm ${GROUP}.production.${PROJECT}'
+              echo 'Removed current production container'
             }
           }
         }
