@@ -7,7 +7,7 @@ services:
       dockerfile: docker/staging/Dockerfile
     image: php:8-apache
     working_dir: /var/www/html
-    container_name: php_apache_${APP_NAME}_${APP_ENV}
+    container_name: menke.staging.testproject.mysql
     restart: always
     ports:
       - "8081:80"
@@ -18,7 +18,7 @@ services:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: always
-    container_name: mysql_${APP_NAME}_${APP_ENV}
+    container_name: menke.staging.testproject.mysql
     environment:
       - MYSQL_ROOT_PASSWORD=thisisareallystrongpassword123
       - MYSQL_DATABASE=${DB_DATABASE}
