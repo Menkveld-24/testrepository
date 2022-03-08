@@ -29,13 +29,13 @@ pipeline {
     
    stage('Running composer update') {
       steps {
-        sh 'docker exec -it ${GROUP}.production.${PROJECT} composer update '
+        sh 'docker exec ${GROUP}.production.${PROJECT} composer update '
       }
     }
   
     stage('Running composer install') {
       steps {
-        sh 'docker exec -it ${GROUP}.production.${PROJECT} composer install '
+        sh 'docker exec ${GROUP}.production.${PROJECT} composer install '
       }
     }
    
