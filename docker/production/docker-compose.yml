@@ -20,3 +20,8 @@ volumes:
   storage:
     external:
       name: menke.production.testproject.storage
+
+networks:
+  default:
+    external:
+      name: nginx-proxy
