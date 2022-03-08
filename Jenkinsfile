@@ -59,32 +59,32 @@ pipeline {
       }
     }
 
-    stage('Freezing production containers') {
-      steps {
-        sh 'docker pause ${GROUP}.production.${PROJECT}'
-        sh 'docker pause ${GROUP}.production.${PROJECT}.mysql'
-        echo 'Froze containers'
-      }
-    }
+//     stage('Freezing production containers') {
+//       steps {
+//         sh 'docker pause ${GROUP}.production.${PROJECT}'
+//         sh 'docker pause ${GROUP}.production.${PROJECT}.mysql'
+//         echo 'Froze containers'
+//       }
+//     }
 
-    stage('Cloning live volumes into staging') {
-      steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-          sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.storage ${GROUP}.staging.${PROJECT}.storage'
-          sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.database ${GROUP}.staging.${PROJECT}.database'
-          echo 'Duplicated volumes'
-        }
+//     stage('Cloning live volumes into staging') {
+//       steps {
+//         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+//           sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.storage ${GROUP}.staging.${PROJECT}.storage'
+//           sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.database ${GROUP}.staging.${PROJECT}.database'
+//           echo 'Duplicated volumes'
+//         }
 
-      }
-    }
+//       }
+//     }
 
-    stage('Resume containers') {
-      steps {
-        sh 'docker unpause ${GROUP}.production.${PROJECT}.mysql'
-        sh 'docker unpause ${GROUP}.production.${PROJECT}'
-        echo 'Resumed containers'
-      }
-    }
+//     stage('Resume containers') {
+//       steps {
+//         sh 'docker unpause ${GROUP}.production.${PROJECT}.mysql'
+//         sh 'docker unpause ${GROUP}.production.${PROJECT}'
+//         echo 'Resumed containers'
+//       }
+//     }
 
     stage('Building and deploying') {
       steps {
