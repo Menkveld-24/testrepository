@@ -1,4 +1,3 @@
-
 FROM php:8-apache as webserver
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
@@ -10,7 +9,7 @@ COPY ./ /var/www/html/
 RUN docker-php-ext-install pdo_mysql
 RUN docker-php-ext-enable pdo_mysql
 
-RUN apt-get update && apt-get install zip libzip-dev -y
+RUN apt-get update && apt-get install zip libzip-dev nano -y 
 
 RUN docker-php-ext-configure zip
 
