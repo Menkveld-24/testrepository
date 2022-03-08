@@ -28,7 +28,7 @@ pipeline {
     
     stage('Building') {
       steps {
-        sh 'docker-compose --file ./docker/production/docker-compose.yml up -d --build'
+        sh 'docker-compose --no-cache --file ./docker/production/docker-compose.yml up -d --build'
         echo 'Completed successfully!'
       }
     }
