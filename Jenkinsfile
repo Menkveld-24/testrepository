@@ -58,7 +58,7 @@ pipeline {
         echo 'Created new volumes!'
       }
     }
-      
+
     stage('Copying .env') {
       steps {
         sh 'cp .env.example .env'
@@ -67,7 +67,7 @@ pipeline {
 
     stage('Building and deploying') {
       steps {
-        sh 'docker-compose --file ./docker/staging/docker-compose.yml up -d --build'
+        sh 'docker-compose --file ./docker/staging/docker-compose.yml --env-file ./.env up -d --build'
         echo 'Completed successfully!'
       }
     }
