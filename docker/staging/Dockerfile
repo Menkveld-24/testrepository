@@ -7,7 +7,7 @@ ENV MYSQL_DATABASE=staging
 ENV MYSQL_USER=staging
 ENV MYSQL_PASSWORD=staging
 EXPOSE 3306
-RUN ls
+# RUN ls
 
 
 FROM php:8-apache as webserver
@@ -32,6 +32,7 @@ RUN docker-php-ext-configure zip
 
 WORKDIR /var/www/html
 # RUN cp .env.example .env
+RUN ls
 
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer update
