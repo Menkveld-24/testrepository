@@ -82,7 +82,7 @@ pipeline {
 
   }
   environment {
-    GROUP = 'iea'
-    PROJECT = 'testlaravel'
+    GROUP = 'menke'
+    PROJECT = 'testproject'
   }
 }
