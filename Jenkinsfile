@@ -53,16 +53,7 @@ pipeline {
         }
 
       }
-      steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-          sh 'docker rm ${GROUP}.staging.${PROJECT}'
-          sh 'docker rm ${GROUP}.staging.${PROJECT}.mysql'
-          echo 'Deleted old containers'
-        }
-
-      }
     }
-
     stage('Removing staging storage and database') {
       steps {
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
