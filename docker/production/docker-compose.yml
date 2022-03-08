@@ -1,1 +1,15 @@
-version "3"
+version: "3.3"
+
+services:
+  php:
+    build:
+      context: ../../
+      dockerfile: docker/production/Dockerfile
+    image: php:8-apache
+    working_dir: /var/www/html
+    container_name: menke.production.testproject
+    restart: always
+    ports:
+      - "8081:80"
+      - "8082:81"
+      - "8083:443"
