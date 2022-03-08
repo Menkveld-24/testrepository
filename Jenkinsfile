@@ -2,9 +2,6 @@ pipeline {
   agent any
   stages {
     stage('Stopping current container') {
-      parallel {
-        stage('Stopping current container') {
-          agent any
           steps {
             catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
               sh '''docker stop ${GROUP}.staging.${PROJECT}
@@ -15,61 +12,13 @@ pipeline {
           }
         }
 
-        stage('Stopping current containers database') {
-          steps {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-              sh '''docker stop ${GROUP}.staging.${PROJECT}.mysql
-'''
-              echo 'Stopped mysql container'
-            }
-
-          }
-        }
-
-      }
-    }
-
-    stage('Deleting current staging containers') {
-      parallel {
-        stage('Removing current container') {
-          agent any
-          steps {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-              sh 'docker rm ${GROUP}.staging.${PROJECT}'
-              echo 'Removed current staging container'
-            }
-
-          }
-        }
-
-        stage('Removing current containers database') {
-          steps {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-              sh 'docker rm ${GROUP}.staging.${PROJECT}.mysql'
-              echo 'Removed mysql container'
-            }
-
-          }
-        }
-
-      }
-    }
-    stage('Removing staging storage and database') {
+    stage('Deleting current staging container') {
       steps {
         catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
-          sh 'docker volume rm ${GROUP}.staging.${PROJECT}.storage'
-          sh 'docker volume rm ${GROUP}.staging.${PROJECT}.database'
-          echo 'Deleted old database and storage'
+          sh 'docker rm ${GROUP}.staging.${PROJECT}'
+          echo 'Removed current staging container'
         }
 
-      }
-    }
-
-    stage('Recreating database and storage volumes') {
-      steps {
-        sh 'docker volume create ${GROUP}.staging.${PROJECT}.storage'
-        sh 'docker volume create ${GROUP}.staging.${PROJECT}.database'
-        echo 'Created new volumes!'
       }
     }
 
