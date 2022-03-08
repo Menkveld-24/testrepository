@@ -6,8 +6,9 @@ pipeline {
         stage('Stopping current container') {
           agent any
           steps {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
-              sh 'docker stop ${GROUP}.staging.${PROJECT}'
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
+              sh '''docker stop ${GROUP}.staging.${PROJECT}
+'''
               echo 'Stopped current staging container'
             }
 
@@ -16,7 +17,7 @@ pipeline {
 
         stage('Stopping current containers database') {
           steps {
-            catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+            catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
               sh '''docker stop ${GROUP}.staging.${PROJECT}.mysql
 '''
               echo 'Stopped mysql container'
@@ -30,7 +31,7 @@ pipeline {
 
     stage('Deleting current staging containers') {
       steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
           sh 'docker rm ${GROUP}.staging.${PROJECT}'
           sh 'docker rm ${GROUP}.staging.${PROJECT}.mysql'
           echo 'Deleted old containers'
@@ -41,7 +42,7 @@ pipeline {
 
     stage('Removing staging storage and database') {
       steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
           sh 'docker volume rm ${GROUP}.staging.${PROJECT}.storage'
           sh 'docker volume rm ${GROUP}.staging.${PROJECT}.database'
           echo 'Deleted old database and storage'
@@ -68,7 +69,7 @@ pipeline {
 
     stage('Cloning live volumes into staging') {
       steps {
-        catchError(buildResult: 'SUCCESS', stageResult: 'FAILED') {
+        catchError(buildResult: 'SUCCESS', stageResult: 'FAILURE') {
           sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.storage ${GROUP}.staging.${PROJECT}.storage'
           sh 'docker_clone_volume.sh ${GROUP}.production.${PROJECT}.database ${GROUP}.staging.${PROJECT}.database'
           echo 'Duplicated volumes'
