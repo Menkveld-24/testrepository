@@ -13,3 +13,14 @@ services:
       - "8081:80"
       - "8082:81"
       - "8083:443"
+    volumes:
+      - storage:/var/www/html/storage
+      - env/.env:/var/www/html/.env
+      
+volumes:
+  env:
+    external:
+      name: menke.production.testproject.env
+  storage:
+    external:
+      name: menke.production.testproject.storage
