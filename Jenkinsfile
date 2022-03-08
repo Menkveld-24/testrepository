@@ -1,6 +1,7 @@
 pipeline {
   agent any
   stages {
+    stage('Stopping current containers') {  
     parallel {
         stage('Stopping current container') {
           agent any
@@ -22,7 +23,7 @@ pipeline {
           }
         }
       }
-    }
+  }
     stage('Deleting current staging containers') {
       parallel {
         stage('Removing current container') {
@@ -42,7 +43,7 @@ pipeline {
             }
           }
         }
-
+      }
       }
     stage('Copying .env') {
       steps {
