@@ -4,7 +4,7 @@ services:
   php:
     build:
       context: ../../
-      dockerfile: ./Docker/staging/Dockerfile
+      dockerfile: Dockerfile
     image: php:8-apache
     working_dir: /var/www/html
     container_name: php_apache
